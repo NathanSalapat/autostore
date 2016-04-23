@@ -41,9 +41,11 @@ minetest.register_node('autostore:'..nname, {
 	on_receive_fields = function(pos, formname, fields, sender)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
+		local out = inv:get_stack("output", 1)
 		if fields['buy'] then
 			local instack = inv:get_stack("input", 1)
-			if instack:get_name() == cost then
+			if instack:get_name() == cost
+			and out:item_fits(selling) then
 				instack:take_item()
 				inv:set_stack("input",1,instack)
 				inv:add_item('output',selling)
