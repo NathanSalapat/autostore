@@ -25,7 +25,6 @@ minetest.register_node('autostore:store_1', {
 		local inv = meta:get_inventory()
         meta:set_string('infotext', 'Unconfigured Store')
         meta:set_string('formspec', formspec_owner)
-		inv:set_size('main', 8*4)
 		inv:set_size("selling", 1)
 		inv:set_size("cost", 1)
         inv:set_size("input", 1)
@@ -57,17 +56,17 @@ minetest.register_node('autostore:store_1', {
             minetest.swap_node(pos,{name = 'autostore:store', param2=node.param2})
             local selling_1 = inv:get_stack("selling", 1)
             local cost_1 = inv:get_stack('cost', 1)
-            local selling = selling_1:get_name()
-            local cost = cost_1:get_name()
-            print (selling)
-            print (cost)
+            local selling_thing = selling_1:get_name()
+            local cost_thing = cost_1:get_name()
             meta:set_string('infotext', fields.sname)
+            meta:set_string('selling', selling_thing)
+            meta:set_string('cost', cost_thing)
             meta:set_string('formspec',
             'size[8,6;]'..
             'label[0,0;Selling:]'..
-            'item_image_button[1.5,0;1,1;'..selling..';blah;]'..
+            'item_image_button[1.5,0;1,1;'..selling_thing..';blah;]'..
             'label[0,1;For:]'..
-            'item_image_button[1.5,1;1,1;'..cost..';blah;]'..
+            'item_image_button[1.5,1;1,1;'..cost_thing..';blah;]'..
             'label[3,0;Pay:]'..
             'list[context;input;4.5,0;1,1;]'..
             'label[3,1;Take:]'..
@@ -105,12 +104,15 @@ minetest.register_node('autostore:store', {
     on_receive_fields = function(pos, formname, fields, sender)
         local meta = minetest.get_meta(pos)
         local inv = meta:get_inventory()
+        local out = inv:get_stack("output", 1)
+        local cost_thing = meta:get_string('cost')
+        local selling_thing = meta:get_string('selling')
         if fields['buy'] then
             local instack = inv:get_stack("input", 1)
-            if instack:get_name() == cost and out:item_fits(output) then
+            if instack:get_name() == cost_thing and out:item_fits(selling_thing) then
                 instack:take_item()
                 inv:set_stack("input",1,instack)
-                inv:add_item("output",selling)
+                inv:add_item("output",selling_thing)
             end
         end
     end,
