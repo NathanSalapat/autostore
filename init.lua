@@ -4,18 +4,18 @@ minetest.register_privilege("autostore", {
 })
 
 formspec_owner =
-    'size[8,6;]'..
-    'label[0,0;Selling What:]'..
-    'list[context;selling;2,0;1,1;]'..
-    'label[0,1;For How Much:]'..
-    'list[context;cost;2,1;1,1;]'..
-    'field[5.3,0.4;3,1;sname;store name;Unconfigured Store]'..
-    'button_exit[6,1;2,1;save;Save Store]'..
-    'list[current_player;main;0,2;8,4;]'
+	'size[8,6;]'..
+	'label[0,0;Selling What:]'..
+	'list[context;selling;2,0;1,1;]'..
+	'label[0,1;For How Much:]'..
+	'list[context;cost;2,1;1,1;]'..
+	'field[5.3,0.4;3,1;sname;store name;Unconfigured Store]'..
+	'button_exit[6,1;2,1;save;Save Store]'..
+	'list[current_player;main;0,2;8,4;]'
 
 minetest.register_node('autostore:store_1', {
 	description = 'store',
-	tiles = {'default_wood.png'},
+	tiles = {'autostore_top.png', 'autostore_side.png', 'autostore_side.png', 'autostore_side.png', 'autostore_side.png', 'autostore_front.png'},
 	groups = {oddly_breakable_by_hand=3, choppy=2},
 	paramtype = 'light',
 	paramtype2 = 'facedir',
@@ -23,15 +23,15 @@ minetest.register_node('autostore:store_1', {
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-        meta:set_string('infotext', 'Unconfigured Store')
-        meta:set_string('formspec', formspec_owner)
+		meta:set_string('infotext', 'Unconfigured Store')
+		meta:set_string('formspec', formspec_owner)
 		inv:set_size("selling", 1)
 		inv:set_size("cost", 1)
-        inv:set_size("input", 1)
-        inv:set_size("output", 1)
+		inv:set_size("input", 1)
+		inv:set_size("output", 1)
 	end,
 
-    after_place_node = function(pos, placer)
+	after_place_node = function(pos, placer)
 		if minetest.check_player_privs(placer:get_player_name(), {autostore = true}) then
 		else
 			minetest.remove_node(pos)
@@ -39,53 +39,53 @@ minetest.register_node('autostore:store_1', {
 		end
 	end,
 
-    can_dig = function(pos, player)
-    	if minetest.check_player_privs(player:get_player_name(), {autostore = true}) then
-            return true
-        else
-            return false
-        end
-    end,
+	can_dig = function(pos, player)
+		if minetest.check_player_privs(player:get_player_name(), {autostore = true}) then
+			return true
+		else
+			return false
+		end
+	end,
 
-    on_receive_fields = function(pos, formname, fields, sender)
-        local meta = minetest.get_meta(pos)
-        local inv = meta:get_inventory()
-        local out = inv:get_stack("output", 1)
-        local node = minetest.get_node(pos)
-        if fields ['save'] then
-            minetest.swap_node(pos,{name = 'autostore:store', param2=node.param2})
-            local selling_1 = inv:get_stack("selling", 1)
-            local cost_1 = inv:get_stack('cost', 1)
-            local selling_thing = selling_1:get_name()
-            local cost_thing = cost_1:get_name()
-            meta:set_string('infotext', fields.sname)
-            meta:set_string('selling', selling_thing)
-            meta:set_string('cost', cost_thing)
-            meta:set_string('formspec',
-            'size[8,6;]'..
-            'label[0,0;Selling:]'..
-            'item_image_button[1.5,0;1,1;'..selling_thing..';blah;]'..
-            'label[0,1;For:]'..
-            'item_image_button[1.5,1;1,1;'..cost_thing..';blah;]'..
-            'label[3,0;Pay:]'..
-            'list[context;input;4.5,0;1,1;]'..
-            'label[3,1;Take:]'..
-        	'list[context;output;4.5,1;1,1;]'..
-            'button[6,0;2,1;buy;Buy Now]'..
-            'list[current_player;main;0,2;8,4;]')
-        end
+	on_receive_fields = function(pos, formname, fields, sender)
+		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		local out = inv:get_stack("output", 1)
+		local node = minetest.get_node(pos)
+		if fields ['save'] then
+			minetest.swap_node(pos,{name = 'autostore:store', param2=node.param2})
+			local selling_1 = inv:get_stack("selling", 1)
+			local cost_1 = inv:get_stack('cost', 1)
+			local selling_thing = selling_1:get_name()
+			local cost_thing = cost_1:get_name()
+			meta:set_string('infotext', fields.sname)
+			meta:set_string('selling', selling_thing)
+			meta:set_string('cost', cost_thing)
+			meta:set_string('formspec',
+			'size[8,6;]'..
+			'label[0,0;Selling:]'..
+			'item_image_button[1.5,0;1,1;'..selling_thing..';blah;]'..
+			'label[0,1;For:]'..
+			'item_image_button[1.5,1;1,1;'..cost_thing..';blah;]'..
+			'label[3,0;Pay:]'..
+			'list[context;input;4.5,0;1,1;]'..
+			'label[3,1;Take:]'..
+			'list[context;output;4.5,1;1,1;]'..
+			'button[6,0;2,1;buy;Buy Now]'..
+			'list[current_player;main;0,2;8,4;]')
+		end
 	end,
 })
 
 minetest.register_node('autostore:store', {
 	description = 'store',
-	tiles = {'default_wood.png'},
+	tiles = {'autostore_top.png', 'autostore_side.png', 'autostore_side.png', 'autostore_side.png', 'autostore_side.png', 'autostore_front.png'},
 	groups = {oddly_breakable_by_hand=3, choppy=2},
 	paramtype = 'light',
 	paramtype2 = 'facedir',
-    drop = 'autostore:store_1',
+	drop = 'autostore:store_1',
 
-    after_place_node = function(pos, placer)
+	after_place_node = function(pos, placer)
 		if minetest.check_player_privs(placer:get_player_name(), {autostore = true}) then
 		else
 			minetest.remove_node(pos)
@@ -93,27 +93,27 @@ minetest.register_node('autostore:store', {
 		end
 	end,
 
-    can_dig = function(pos, player)
-        if minetest.check_player_privs(player:get_player_name(), {autostore = true}) then
-            return true
-        else
-            return false
-        end
-    end,
+	can_dig = function(pos, player)
+		if minetest.check_player_privs(player:get_player_name(), {autostore = true}) then
+			return true
+		else
+			return false
+		end
+	end,
 
-    on_receive_fields = function(pos, formname, fields, sender)
-        local meta = minetest.get_meta(pos)
-        local inv = meta:get_inventory()
-        local out = inv:get_stack("output", 1)
-        local cost_thing = meta:get_string('cost')
-        local selling_thing = meta:get_string('selling')
-        if fields['buy'] then
-            local instack = inv:get_stack("input", 1)
-            if instack:get_name() == cost_thing and out:item_fits(selling_thing) then
-                instack:take_item()
-                inv:set_stack("input",1,instack)
-                inv:add_item("output",selling_thing)
-            end
-        end
-    end,
+	on_receive_fields = function(pos, formname, fields, sender)
+		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		local out = inv:get_stack("output", 1)
+		local cost_thing = meta:get_string('cost')
+		local selling_thing = meta:get_string('selling')
+		if fields['buy'] then
+			local instack = inv:get_stack("input", 1)
+			if instack:get_name() == cost_thing and out:item_fits(selling_thing) then
+				instack:take_item()
+				inv:set_stack("input",1,instack)
+				inv:add_item("output",selling_thing)
+			end
+		end
+	end,
 })
