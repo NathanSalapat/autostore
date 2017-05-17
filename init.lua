@@ -4,21 +4,22 @@ minetest.register_privilege("autostore", {
 })
 
 formspec_owner =
-	'size[8,6;]'..
-	'label[0,0;Selling What:]'..
-	'list[context;selling;2,0;1,1;]'..
-	'field[3.3,0.4;1,1;sellinga;;1]'..
-	'label[0,1;For How Much:]'..
-	'list[context;cost;2,1;1,1;]'..
-	'field[3.3,1.4;1,1;costa;;1]'..
-	'field[5.3,0.4;3,1;sname;store name;Unconfigured Store]'..
-	'button_exit[6,1;2,1;save;Save Store]'..
-	'list[current_player;main;0,2;8,4;]'
+   'size[8,7;]'..
+   'label[0,0.25;Selling What:]'..
+   'list[context;selling;2,0;1,1;]'..
+   'field[3.3,0.4;1,1;sellinga;;1]'..
+   'label[0,1.25;For How Much:]'..
+   'list[context;cost;2,1;1,1;]'..
+   'field[3.3,1.4;1,1;costa;;1]'..
+   'field[5.3,0.4;3,1;sname;store name;Unconfigured Store]'..
+   'field[0.3,2.5;8,1;desc;What the item is or is used for. (Optional);]'..
+   'button_exit[5,1;3,1;save;Save Store]'..
+   'list[current_player;main;0,3;8,4;]'
 
 minetest.register_node('autostore:store_1', {
 	description = 'store',
 	tiles = {'autostore_top.png', 'autostore_side.png', 'autostore_side.png', 'autostore_side.png', 'autostore_side.png', 'autostore_off.png'},
-	groups = {oddly_breakable_by_hand=3, choppy=2},
+	groups = {oddly_breakable_by_hand=3, choppy=2, not_in_creative_inventory=1},
 	paramtype = 'light',
 	paramtype2 = 'facedir',
 
@@ -62,23 +63,26 @@ minetest.register_node('autostore:store_1', {
 			local cost_thing = cost_1:get_name()
 			local selling_amount = tonumber(fields.sellinga)
 			local cost_amount = tonumber(fields.costa)
+         local desc = fields.desc
 			meta:set_string('infotext', fields.sname)
 			meta:set_string('sellinga', selling_amount)
 			meta:set_string('costa', cost_amount)
 			meta:set_string('selling', selling_thing)
 			meta:set_string('cost', cost_thing)
-			meta:set_string('formspec',
+         meta:set_string('formspec',
 			'size[8,6;]'..
-			'label[0,0;Selling:]'..
-			'item_image_button[1.5,0;1,1;'..selling_thing..' '..selling_amount..';blah;]'..
-			'label[0,1;For:]'..
-			'item_image_button[1.5,1;1,1;'..cost_thing..' '..cost_amount..';blah;]'..
-			'label[3,0;Pay:]'..
-			'list[context;input;4.5,0;1,1;]'..
-			'label[3,1;Take:]'..
-			'list[context;output;4.5,1;1,1;]'..
-			'button[6,0;2,1;buy;Buy Now]'..
+			'label[0,0.25;Selling:]'..
+			'item_image_button[1,0;1,1;'..selling_thing..' '..selling_amount..';blah;]'..
+			'label[0,1.25;For:]'..
+			'item_image_button[1,1;1,1;'..cost_thing..' '..cost_amount..';blah;]'..
+			'label[2,0.25;Pay:]'..
+			'list[context;input;3,0;1,1;]'..
+			'label[2,1.25;Take:]'..
+			'list[context;output;3,1;1,1;]'..
+         'textarea[4.3,0;4,2;;'..desc..';]'..
+			'button[6,1;2,1;buy;Buy Now]'..
 			'list[current_player;main;0,2;8,4;]')
+
 		end
 	end,
 })
