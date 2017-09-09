@@ -17,9 +17,9 @@ formspec_owner =
    'list[current_player;main;0,3;8,4;]'
 
 minetest.register_node('autostore:store_1', {
-	description = 'store',
+	description = 'Unconfigured Store',
 	tiles = {'autostore_top.png', 'autostore_side.png', 'autostore_side.png', 'autostore_side.png', 'autostore_side.png', 'autostore_off.png'},
-	groups = {oddly_breakable_by_hand=3, choppy=2, not_in_creative_inventory=1},
+	groups = {oddly_breakable_by_hand=3, choppy=2},
 	paramtype = 'light',
 	paramtype2 = 'facedir',
 
@@ -88,9 +88,9 @@ minetest.register_node('autostore:store_1', {
 })
 
 minetest.register_node('autostore:store', {
-	description = 'store',
+	description = 'Configured Store (Something Broke)',
 	tiles = {'autostore_top.png', 'autostore_side.png', 'autostore_side.png', 'autostore_side.png', 'autostore_side.png', 'autostore_front.png'},
-	groups = {oddly_breakable_by_hand=3, choppy=2},
+	groups = {oddly_breakable_by_hand=3, choppy=2, not_in_creative_inventory=1},
 	paramtype = 'light',
 	paramtype2 = 'facedir',
 	drop = 'autostore:store_1',
